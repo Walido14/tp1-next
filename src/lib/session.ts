@@ -1,7 +1,12 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+const raw = process.env.JWT_SECRET;
+if (!raw || raw.length < 32) {
+  throw new Error("JWT_SECRET manquant ou trop court (32 caractères minimum)");
+}
+
+const secret = new TextEncoder().encode(raw);
 export const COOKIE_NAME = "session";
 const MAX_AGE = 60 * 60 * 24 * 7; // 7 jours
 
@@ -26,11 +31,15 @@ export async function getSession(): Promise<{ userId: number } | null> {
   const store = await cookies();
   const token = store.get(COOKIE_NAME)?.value;
   if (!token) return null;
+
   try {
-    const { payload } = await jwtVerify(token, secret);
-    return { userId: payload.userId as number };
+    const { payload } = await jwtVerify(token, secret, {
+      algorithms: ["HS256"],
+    });
+    if (typeof payload.userId !== "number") return null;
+    return { userId: payload.userId };
   } catch {
-    return null; // token invalide ou expiré
+    return null; // jeton invalide ou expiré
   }
 }
 

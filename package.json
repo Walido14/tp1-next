@@ -10,9 +10,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
-    "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.3",
-    "D": "^1.0.0",
     "jose": "^6.2.12",
     "next": "16.4.0",
     "prisma": "^6.19.3",
@@ -26,9 +24,11 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "dotenv": "^16",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }
